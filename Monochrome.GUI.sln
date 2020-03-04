@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monochrome.GUI", "Monochrome.GUI.csproj", "{8A0927A7-69E8-491E-AC42-37F36E8DFF6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monogame.GUI.Sample", "Monogame.GUI.Sample\Monogame.GUI.Sample.csproj", "{724ACC8D-8A4E-4007-9EA7-176D6C01C96C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A0927A7-69E8-491E-AC42-37F36E8DFF6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A0927A7-69E8-491E-AC42-37F36E8DFF6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A0927A7-69E8-491E-AC42-37F36E8DFF6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A0927A7-69E8-491E-AC42-37F36E8DFF6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{724ACC8D-8A4E-4007-9EA7-176D6C01C96C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{724ACC8D-8A4E-4007-9EA7-176D6C01C96C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{724ACC8D-8A4E-4007-9EA7-176D6C01C96C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{724ACC8D-8A4E-4007-9EA7-176D6C01C96C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
