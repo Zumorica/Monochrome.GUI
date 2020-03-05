@@ -36,6 +36,11 @@ namespace Monochrome.GUI
         {
             return new Color(a.R*b.R, a.G*b.G, a.B*b.B, a.A*b.A);
         }
+
+        public static Color WithAlpha(this Color c, float a)
+        {
+            return new Color(c.R, c.G, c.B, a);
+        }
         
         public static Color? TryFromHex(ReadOnlySpan<char> hexColor)
         {

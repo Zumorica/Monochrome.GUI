@@ -18,22 +18,22 @@
       <Compile Remove="Controls\OutputPanel.cs" />
       <Compile Remove="Controls\HistoryLineEdit.cs" />
       <Compile Remove="Controls\CheckBox.cs" />
-      <Compile Remove="Controls\Button.cs" />
       <Compile Remove="Controls\RichTextLabel.cs" />
       <Compile Remove="Controls\SpinBox.cs" />
       <Compile Remove="Controls\TabContainer.cs" />
       <Compile Remove="Controls\SS14Window.cs" />
       <Compile Remove="Controls\CheckButton.cs" />
       <Compile Remove="Controls\Tree.cs" />
-      <Compile Remove="Monogame.GUI.Sample\**" />
+      <Compile Remove="Controls\Button.cs" />
+      <Compile Remove="Monochrome.GUI.Sample\**" />
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Remove="Monogame.GUI.Sample\**" />
+      <EmbeddedResource Remove="Monochrome.GUI.Sample\**" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Monogame.GUI.Sample\**" />
+      <None Remove="Monochrome.GUI.Sample\**" />
     </ItemGroup>
 
 </Project>

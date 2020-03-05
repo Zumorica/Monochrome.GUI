@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monochrome.GUI", "Monochrome.GUI.csproj", "{8A0927A7-69E8-491E-AC42-37F36E8DFF6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monogame.GUI.Sample", "Monogame.GUI.Sample\Monogame.GUI.Sample.csproj", "{724ACC8D-8A4E-4007-9EA7-176D6C01C96C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monochrome.GUI.Sample", "Monochrome.GUI.Sample\Monochrome.GUI.Sample.csproj", "{724ACC8D-8A4E-4007-9EA7-176D6C01C96C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

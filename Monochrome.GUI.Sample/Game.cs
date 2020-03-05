@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Monochrome.GUI;
 using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
 
-namespace Monogame.GUI.Sample
+namespace Monochrome.GUI.Sample
 {
     public class Game : Microsoft.Xna.Framework.Game
     {
@@ -42,7 +42,7 @@ namespace Monogame.GUI.Sample
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == 
-                ButtonState.Pressed || Keyboard.GetState().IsKeyDown(
+                ButtonState.Pressed || Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(
                     Keys.Escape))
                 Exit();
             base.Update(gameTime);

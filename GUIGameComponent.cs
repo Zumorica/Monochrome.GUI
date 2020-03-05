@@ -23,6 +23,7 @@ namespace Monochrome.GUI
         public DrawingHandleScreen DrawingHandleScreen { get; }
         private readonly SpriteBatch _spriteBatch;
         private readonly Game _game;
+        private readonly DefaultStyle _style;
 
         public static Vector2 ScreenSize
         {
@@ -44,6 +45,7 @@ namespace Monochrome.GUI
             
             _game = game;
             _spriteBatch = new SpriteBatch(graphicsDevice);
+            _style = new DefaultStyle(graphicsDevice);
             DrawingHandleScreen = new SpriteBatchDrawingHandleScreen(_spriteBatch);
         }
 
@@ -51,12 +53,10 @@ namespace Monochrome.GUI
         {
             base.Initialize();
             UserInterfaceManager.Initialize();
-            var popup = new Popup() {CustomMinimumSize = new Vector2(300, 300)};
+
+            UserInterfaceManager.Stylesheet = _style.Stylesheet;
             
-            UserInterfaceManager.RootControl.AddChild(popup);
-            UserInterfaceManager.RootControl.AddChild(new ItemList(){CustomMinimumSize = new Vector2(300, 300)});
-            
-            popup.Open(new UIBox2(100, 20, 400, 600));
+            UserInterfaceManager.RootControl.AddChild(new CenterContainer(){Children = { new ContainerButton(){CustomMinimumSize = new Vector2(50, 100)}}});
         }
 
         public override void Update(GameTime gameTime)

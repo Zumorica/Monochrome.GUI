@@ -1,4 +1,5 @@
-﻿using static Monochrome.GUI.Controls.Label;
+﻿using System.Reflection.Emit;
+using static Monochrome.GUI.Controls.Label;
 
 namespace Monochrome.GUI.Controls
 {
@@ -23,7 +24,7 @@ namespace Monochrome.GUI.Controls
         /// <summary>
         ///     How to align the text inside the button.
         /// </summary>
-        public AlignMode TextAlign { get => Label.Align; set => Label.Align = value; }
+        public BoxContainer.AlignMode TextAlign { get => Label.Align; set => Label.Align = value; }
 
         /// <summary>
         ///     If true, the button will allow shrinking and clip text

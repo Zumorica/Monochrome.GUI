@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Monogame.GUI.Sample
+namespace Monochrome.GUI.Sample
 {
     class Program
     {
