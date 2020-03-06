@@ -42,7 +42,7 @@ namespace Monochrome.GUI.Controls
             _buttons.Add(button);
             _hBox.AddChild(button);
 
-            button.OnKeyBindDown += _ => OpenPopupFor(button);
+            button.OnMouseButtonDown += _ => OpenPopupFor(button);
 
             button.OnMouseEntered += _ =>
             {
@@ -102,7 +102,7 @@ namespace Monochrome.GUI.Controls
                             Text = menuButton.Text,
                             ClipText = true,
                             Disabled = menuButton.Disabled,
-                            TextAlign = Label.AlignMode.Left
+                            TextAlign = (BoxContainer.AlignMode) Label.AlignMode.Left
                         };
                         pushButton.OnPressed += _ => menuButton.OnPressed?.Invoke();
                         container.AddChild(pushButton);

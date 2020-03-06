@@ -149,7 +149,7 @@ namespace Monochrome.GUI.Controls
                         continue;
                     }
 
-                    titleLength += metrics.Advance;
+                    titleLength += (int)metrics.Advance;
                 }
 
                 var active = _currentTab == i;
@@ -230,9 +230,9 @@ namespace Monochrome.GUI.Controls
             _fixChildMargins(control);
         }
 
-        protected internal override void KeyBindDown(GUIBoundKeyEventArgs args)
+        protected internal override void MouseButtonDown(GUIMouseButtonEventArgs args)
         {
-            base.KeyBindDown(args);
+            base.MouseButtonDown(args);
 
             if (!TabsVisible || !args.CanFocus)
             {
@@ -268,7 +268,7 @@ namespace Monochrome.GUI.Controls
                         continue;
                     }
 
-                    titleLength += metrics.Advance;
+                    titleLength += (int)metrics.Advance;
                 }
 
                 var active = _currentTab == i;

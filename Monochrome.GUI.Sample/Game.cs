@@ -13,12 +13,10 @@ namespace Monochrome.GUI.Sample
         private SpriteBatch _spriteBatch;
         private GUIGameComponent _guiGameComponent;
 
-        private Texture2D _xnaTexture;
-        private IntPtr _imGuiTexture;
-        
         public Game()
         {
             _graphics = new GraphicsDeviceManager(this);
+            Window.AllowUserResizing = true;
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -42,7 +40,7 @@ namespace Monochrome.GUI.Sample
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == 
-                ButtonState.Pressed || Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(
+                ButtonState.Pressed || Keyboard.GetState().IsKeyDown(
                     Keys.Escape))
                 Exit();
             base.Update(gameTime);

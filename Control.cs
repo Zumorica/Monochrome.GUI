@@ -357,7 +357,7 @@ namespace Monochrome.GUI
             DisposeAllChildren();
             Parent?.RemoveChild(this);
 
-            OnKeyBindDown = null;
+            OnMouseButtonDown = null;
         }
 
         ~Control()

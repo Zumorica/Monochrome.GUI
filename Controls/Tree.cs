@@ -83,9 +83,9 @@ namespace Monochrome.GUI.Controls
             return item;
         }
 
-        protected internal override void KeyBindDown(GUIBoundKeyEventArgs args)
+        protected internal override void MouseButtonDown(GUIMouseButtonEventArgs args)
         {
-            base.KeyBindDown(args);
+            base.MouseButtonDown(args);
 
             if (!args.CanFocus)
             {
@@ -209,10 +209,10 @@ namespace Monochrome.GUI.Controls
             if (!string.IsNullOrWhiteSpace(item.Text))
             {
                 var offset = itemSelected.GetContentOffset(Vector2.Zero);
-                var baseLine = offset + (hOffset, vOffset + font.GetAscent(UIScale));
+                var baseLine = offset + new Vector2(hOffset, vOffset + font.GetAscent(UIScale));
                 foreach (var chr in item.Text)
                 {
-                    baseLine += (font.DrawChar(handle, chr, baseLine, UIScale, Color.White), 0);
+                    baseLine += new Vector2(font.DrawChar(handle, chr, baseLine, UIScale, Color.White), 0);
                 }
             }
 

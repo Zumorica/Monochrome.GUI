@@ -395,9 +395,9 @@ namespace Monochrome.GUI.Controls
             return size;
         }
 
-        protected internal override async void KeyBindDown(GUIBoundKeyEventArgs args)
+        protected internal override async void MouseButtonDown(GUIMouseButtonEventArgs args)
         {
-            base.KeyBindDown(args);
+            base.MouseButtonDown(args);
 
             if (SelectMode == ItemListSelectMode.None || !args.CanFocus)
             {

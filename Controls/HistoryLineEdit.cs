@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework.Input;
 
 namespace Monochrome.GUI.Controls
 {
@@ -7,6 +8,9 @@ namespace Monochrome.GUI.Controls
     {
         private const int MaxHistorySize = 100;
         private string _historyTemp;
+
+        public Keys TextHistoryPrev { get; set; } = Keys.Up;
+        public Keys TextHistoryNext { get; set; } = Keys.Up;
 
         public List<string> History { get; } = new List<string>();
         public int HistoryIndex { get; set; } = 0;
@@ -43,16 +47,16 @@ namespace Monochrome.GUI.Controls
             OnHistoryChanged?.Invoke();
         }
 
-        protected internal override void KeyBindDown(GUIBoundKeyEventArgs args)
+        protected internal override void KeyDown(GUIKeyEventArgs args)
         {
-            base.KeyBindDown(args);
+            base.KeyDown(args);
 
-            if (!this.HasKeyboardFocus())
+            if (!HasKeyboardFocus())
             {
                 return;
             }
 
-            if (args.Function == EngineKeyFunctions.TextHistoryPrev)
+            if (args.Key == TextHistoryPrev)
             {
                 if (HistoryIndex <= 0)
                 {
@@ -70,7 +74,7 @@ namespace Monochrome.GUI.Controls
 
                 args.Handle();
             }
-            else if (args.Function == EngineKeyFunctions.TextHistoryNext)
+            else if (args.Key == TextHistoryNext)
             {
                 if (HistoryIndex >= History.Count)
                 {
@@ -79,14 +83,7 @@ namespace Monochrome.GUI.Controls
 
                 HistoryIndex++;
 
-                if (HistoryIndex == History.Count)
-                {
-                    Text = _historyTemp;
-                }
-                else
-                {
-                    Text = History[HistoryIndex];
-                }
+                Text = HistoryIndex == History.Count ? _historyTemp : History[HistoryIndex];
 
                 CursorPos = Text.Length;
 

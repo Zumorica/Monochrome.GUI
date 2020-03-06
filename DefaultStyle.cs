@@ -12,25 +12,22 @@ namespace Monochrome.GUI
         public DefaultStyle(GraphicsDevice graphicsDevice)
         {
             _graphicsDevice = graphicsDevice;
-            
-            var texture = new Texture2D(_graphicsDevice, 1, 1);
-            texture.SetData(new Color[]{Color.Brown});
-            
-            var buttonNormal = new StyleBoxTexture
-            {
-                Texture = texture,
-                Modulate = Color.White
-            };
-            buttonNormal.SetPatchMargin(StyleBox.Margin.All, 10);
-            buttonNormal.SetPadding(StyleBox.Margin.All, 1);
-            buttonNormal.SetContentMarginOverride(StyleBox.Margin.Vertical, 2);
-            buttonNormal.SetContentMarginOverride(StyleBox.Margin.Horizontal, 14);
-            
+
             Stylesheet = new Stylesheet(new []
             {
                 new StyleRule(new SelectorElement(typeof(ContainerButton), null, null, new[] {ContainerButton.StylePseudoClassNormal}), new[]
                 {
-                    new StyleProperty(ContainerButton.StylePropertyStyleBox, buttonNormal),
+                    new StyleProperty(ContainerButton.StylePropertyStyleBox, new StyleBoxFlat(){BackgroundColor = Color.DarkGray}),
+                }),
+                
+                new StyleRule(new SelectorElement(typeof(ContainerButton), null, null, new[] {ContainerButton.StylePseudoClassHover}), new[]
+                {
+                    new StyleProperty(ContainerButton.StylePropertyStyleBox, new StyleBoxFlat(){BackgroundColor = Color.Gray}),
+                }),
+                
+                new StyleRule(new SelectorElement(typeof(ContainerButton), null, null, new[] {ContainerButton.StylePseudoClassPressed}), new[]
+                {
+                    new StyleProperty(ContainerButton.StylePropertyStyleBox, new StyleBoxFlat(){BackgroundColor = Color.DimGray}),
                 }),
             });
         }

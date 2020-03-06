@@ -73,15 +73,14 @@ namespace Monochrome.GUI
 
         void FrameUpdate(GameTime args);
 
-        void KeyBindDown(BoundKeyEventArgs args);
-
-        void KeyBindUp(BoundKeyEventArgs args);
-
+        void InputEvent(InputEventArgs args);
+        void MouseButtonDown(MouseButtonEventArgs args);
+        void MouseButtonUp(MouseButtonEventArgs args);
         void MouseMove(MouseMoveEventArgs mouseMoveEventArgs);
-
         void MouseWheel(MouseWheelEventArgs args);
-
-        void TextEntered(TextEventArgs textEvent);
+        void TextEntered(TextEventArgs args);
+        void KeyDown(KeyEventArgs args);
+        void KeyUp(KeyEventArgs args);
 
         void ControlHidden(Control control);
 

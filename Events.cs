@@ -1,11 +1,17 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace Monochrome.GUI
 {
     public abstract class InputEventArgs : EventArgs
     {
         public bool Handled { get; private set; }
+        
+        /// <summary>
+        ///     Whether the Bound key can change the focused control.
+        /// </summary>
+        public bool CanFocus { get; internal set; }
 
         /// <summary>
         ///     Mark this event as handled.
@@ -50,7 +56,7 @@ namespace Monochrome.GUI
         }
     }
 
-    public class TextEventArgs : EventArgs
+    public class TextEventArgs : InputEventArgs
     {
         public TextEventArgs(uint codePoint)
         {
@@ -65,17 +71,23 @@ namespace Monochrome.GUI
         /// <summary>
         ///     The key that got pressed or released.
         /// </summary>
-        public Keyboard.Key Key { get; }
+        public Keys Key { get; }
 
         /// <summary>
         ///     If true, this key is being held down and another key event is being fired by the OS.
         /// </summary>
         public bool IsRepeat { get; }
+        
+        public Vector2 PointerLocation { get; }
+        
+        public KeyState State { get; }
 
-        public KeyEventArgs(Keyboard.Key key, bool repeat, bool alt, bool control, bool shift, bool system)
+        public KeyEventArgs(Keys key, KeyState state, Vector2 pointerLocation, bool repeat, bool alt, bool control, bool shift, bool system)
             : base(alt, control, shift, system)
         {
             Key = key;
+            State = state;
+            PointerLocation = pointerLocation;
             IsRepeat = repeat;
         }
     }
@@ -86,6 +98,8 @@ namespace Monochrome.GUI
         ///     Position of the mouse relative to the screen.
         /// </summary>
         public Vector2 Position { get; }
+
+        public Vector2 PointerLocation => Position;
 
         protected MouseEventArgs(Vector2 position)
         {
@@ -98,13 +112,17 @@ namespace Monochrome.GUI
         /// <summary>
         ///     The mouse button that has been pressed or released.
         /// </summary>
-        public Mouse.Button Button { get; }
+        public MouseButton Button { get; }
+        
+        public KeyState State { get; }
 
         // ALL the parameters!
-        public MouseButtonEventArgs(Mouse.Button button, Vector2 position)
+        public MouseButtonEventArgs(MouseButton button, KeyState state, Vector2 position)
             : base(position)
         {
             Button = button;
+            State = state;
+            CanFocus = true;
         }
     }
 

@@ -146,9 +146,9 @@ namespace Monochrome.GUI.Controls
             OnClose?.Invoke();
         }
 
-        protected internal override void KeyBindDown(GUIBoundKeyEventArgs args)
+        protected internal override void MouseButtonDown(GUIMouseButtonEventArgs args)
         {
-            base.KeyBindDown(args);
+            base.MouseButtonDown(args);
 
             if (!args.CanFocus)
             {
@@ -166,9 +166,9 @@ namespace Monochrome.GUI.Controls
             MoveToFront();
         }
 
-        protected internal override void KeyBindUp(GUIBoundKeyEventArgs args)
+        protected internal override void MouseButtonUp(GUIMouseButtonEventArgs args)
         {
-            base.KeyBindUp(args);
+            base.MouseButtonUp(args);
 
             if (!args.CanFocus)
             {

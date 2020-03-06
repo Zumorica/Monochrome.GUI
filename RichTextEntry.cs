@@ -129,11 +129,11 @@ namespace Monochrome.GUI
 
                     // Increase word size and such with the current character.
                     var oldWordSizePixels = wordSizePixels;
-                    wordSizePixels += metrics.Advance;
+                    wordSizePixels += (int)metrics.Advance;
                     // TODO: Theoretically, does it make sense to break after the glyph's width instead of its advance?
                     //   It might result in some more tight packing but I doubt it'd be noticeable.
                     //   Also definitely even more complex to implement.
-                    posX += metrics.Advance;
+                    posX += (int)metrics.Advance;
 
                     if (posX > maxSizeX)
                     {

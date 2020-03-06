@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Monochrome.GUI.Controls
 {
@@ -178,7 +179,7 @@ namespace Monochrome.GUI.Controls
             var renderedTextColor = _getFontColor();
 
             var offsetY = (int) (contentBox.Height - font.GetHeight(UIScale)) / 2;
-            var baseLine = new Point(0, offsetY + font.GetAscent(UIScale)) + contentBox.TopLeft;
+            var baseLine = new Vector2(0, offsetY + font.GetAscent(UIScale)) + contentBox.TopLeft;
 
             string renderedText;
 
@@ -273,149 +274,160 @@ namespace Monochrome.GUI.Controls
             _updatePseudoClass();
         }
 
-        protected internal override void KeyBindDown(GUIBoundKeyEventArgs args)
+        public Keys TextBackspace { get; set; } = Keys.Back;
+        public Keys TextCursorLeft { get; set; } = Keys.Left;
+        public Keys TextCursorRight { get; set; } = Keys.Right;
+        public Keys TextCursorBegin { get; set; } = Keys.Home;
+        public Keys TextCursorEnd { get; set; } = Keys.End;
+        public Keys TextSubmit { get; set; } = Keys.Enter;
+        public Keys TextPaste { get; set; } = Keys.V;
+        public Keys TextDelete { get; set; } = Keys.Delete;
+        public Keys TextReleaseFocus { get; set; } = Keys.Escape;
+
+        protected internal override void KeyDown(GUIKeyEventArgs args)
         {
-            base.KeyBindDown(args);
-
-            if (!args.CanFocus)
+            // TODO: Refactor to another thing
+            base.KeyDown(args);
+            
+            if (!this.HasKeyboardFocus())
             {
-                if (!this.HasKeyboardFocus())
-                {
-                    return;
-                }
-                if (args.Function == EngineKeyFunctions.TextBackspace)
-                {
-                    if (_cursorPosition == 0 || !Editable)
-                    {
-                        return;
-                    }
-
-                    _text = _text.Remove(_cursorPosition - 1, 1);
-                    OnTextChanged?.Invoke(new LineEditEventArgs(this, _text));
-                    _cursorPosition -= 1;
-                    _updatePseudoClass();
-                    args.Handle();
-                }
-                else if (args.Function == EngineKeyFunctions.TextCursorLeft)
-                {
-                    if (_cursorPosition == 0)
-                    {
-                        return;
-                    }
-
-                    _cursorPosition -= 1;
-                    args.Handle();
-                }
-                else if (args.Function == EngineKeyFunctions.TextCursorRight)
-                {
-                    if (_cursorPosition == _text.Length)
-                    {
-                        return;
-                    }
-
-                    _cursorPosition += 1;
-                    args.Handle();
-                }
-                else if (args.Function == EngineKeyFunctions.TextCursorBegin)
-                {
-                    _cursorPosition = 0;
-                    args.Handle();
-                }
-                else if (args.Function == EngineKeyFunctions.TextCursorEnd)
-                {
-                    _cursorPosition = _text.Length;
-                    args.Handle();
-                }
-                else if (args.Function == EngineKeyFunctions.TextSubmit)
-                {
-                    if (!Editable)
-                    {
-                        return;
-                    }
-
-                    OnTextEntered?.Invoke(new LineEditEventArgs(this, _text));
-                    args.Handle();
-                }
-                else if (args.Function == EngineKeyFunctions.TextPaste)
-                {
-                    if (!Editable)
-                    {
-                        return;
-                    }
-
-                    var clipboard = IoCManager.Resolve<IClipboardManager>();
-                    InsertAtCursor(clipboard.GetText());
-                    args.Handle();
-                }
-                else if (args.Function == EngineKeyFunctions.TextDelete)
-                {
-                    if (_cursorPosition >= _text.Length || !Editable)
-                    {
-                        return;
-                    }
-
-                    _text = _text.Remove(_cursorPosition, 1);
-                    OnTextChanged?.Invoke(new LineEditEventArgs(this, _text));
-                    _updatePseudoClass();
-                    args.Handle();
-                }
-                else if (args.Function == EngineKeyFunctions.TextReleaseFocus)
-                {
-                    ReleaseKeyboardFocus();
-                    args.Handle();
-                    return;
-                }
+                return;
             }
-            else
+            if (args.Key == TextBackspace)
             {
-                // Find closest cursor position under mouse.
-                var style = _getStyleBox();
-                var contentBox = style.GetContentBox(PixelSizeBox);
-
-                var clickPosX = args.RelativePosition.X * UIScale;
-
-                var font = _getFont();
-                var index = 0;
-                var chrPosX = contentBox.Left;
-                var lastChrPostX = contentBox.Left;
-                foreach (var chr in _text)
+                if (_cursorPosition == 0 || !Editable)
                 {
-                    if (!font.TryGetCharMetrics(chr, UIScale, out var metrics))
-                    {
-                        index += 1;
-                        continue;
-                    }
-
-                    if (chrPosX > clickPosX)
-                    {
-                        break;
-                    }
-
-                    lastChrPostX = chrPosX;
-                    chrPosX += metrics.Advance;
-                    index += 1;
-
-                    if (chrPosX > contentBox.Right)
-                    {
-                        break;
-                    }
+                    return;
                 }
 
-                // Distance between the right side of the glyph overlapping the mouse and the mouse.
-                var distanceRight = chrPosX - clickPosX;
-                // Same but left side.
-                var distanceLeft = clickPosX - lastChrPostX;
-                // If the mouse is closer to the left of the glyph we lower the index one, so we select before that glyph.
-                if (index > 0 && distanceRight > distanceLeft)
-                {
-                    index -= 1;
-                }
-
-                _cursorPosition = index;
+                _text = _text.Remove(_cursorPosition - 1, 1);
+                OnTextChanged?.Invoke(new LineEditEventArgs(this, _text));
+                _cursorPosition -= 1;
+                _updatePseudoClass();
                 args.Handle();
+            }
+            else if (args.Key == TextCursorLeft)
+            {
+                if (_cursorPosition == 0)
+                {
+                    return;
+                }
+
+                _cursorPosition -= 1;
+                args.Handle();
+            }
+            else if (args.Key == TextCursorRight)
+            {
+                if (_cursorPosition == _text.Length)
+                {
+                    return;
+                }
+
+                _cursorPosition += 1;
+                args.Handle();
+            }
+            else if (args.Key == TextCursorBegin)
+            {
+                _cursorPosition = 0;
+                args.Handle();
+            }
+            else if (args.Key == TextCursorEnd)
+            {
+                _cursorPosition = _text.Length;
+                args.Handle();
+            }
+            else if (args.Key == TextSubmit)
+            {
+                if (!Editable)
+                {
+                    return;
+                }
+
+                OnTextEntered?.Invoke(new LineEditEventArgs(this, _text));
+                args.Handle();
+            }
+            else if (args.Key == TextPaste)
+            {
+                if (!Editable)
+                {
+                    return;
+                }
+
+                //TODO: Clipboard....
+                //InsertAtCursor(clipboard.GetText());
+                args.Handle();
+            }
+            else if (args.Key == TextDelete)
+            {
+                if (_cursorPosition >= _text.Length || !Editable)
+                {
+                    return;
+                }
+
+                _text = _text.Remove(_cursorPosition, 1);
+                OnTextChanged?.Invoke(new LineEditEventArgs(this, _text));
+                _updatePseudoClass();
+                args.Handle();
+            }
+            else if (args.Key == TextReleaseFocus)
+            {
+                ReleaseKeyboardFocus();
+                args.Handle();
+                return;
             }
             // Reset this so the cursor is always visible immediately after a keybind is pressed.
             _resetCursorBlink();
+        }
+
+        protected internal override void MouseButtonDown(GUIMouseButtonEventArgs args)
+        {
+            base.MouseButtonDown(args);
+            
+            // Find closest cursor position under mouse.
+            var style = _getStyleBox();
+            var contentBox = style.GetContentBox(PixelSizeBox);
+
+            var clickPosX = args.RelativePosition.X * UIScale;
+
+            var font = _getFont();
+            var index = 0;
+            var chrPosX = contentBox.Left;
+            var lastChrPostX = contentBox.Left;
+            foreach (var chr in _text)
+            {
+                if (!font.TryGetCharMetrics(chr, UIScale, out var metrics))
+                {
+                    index += 1;
+                    continue;
+                }
+
+                if (chrPosX > clickPosX)
+                {
+                    break;
+                }
+
+                lastChrPostX = chrPosX;
+                chrPosX += metrics.Advance;
+                index += 1;
+
+                if (chrPosX > contentBox.Right)
+                {
+                    break;
+                }
+            }
+
+            // Distance between the right side of the glyph overlapping the mouse and the mouse.
+            var distanceRight = chrPosX - clickPosX;
+            // Same but left side.
+            var distanceLeft = clickPosX - lastChrPostX;
+            // If the mouse is closer to the left of the glyph we lower the index one, so we select before that glyph.
+            if (index > 0 && distanceRight > distanceLeft)
+            {
+                index -= 1;
+            }
+
+            _cursorPosition = index;
+            args.Handle();
         }
 
         protected internal override void FocusEntered()

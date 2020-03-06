@@ -31,6 +31,8 @@ namespace Monochrome.GUI
 
         public override void DrawRect(Rectangle rect, Color color, bool filled = true, int borderWidth = 1)
         {
+            rect.Location = Position.ToPoint();
+            rect.Size = (rect.Size.ToVector2() * Scale).ToPoint();
             if (filled)
             {
                 var texture = new Texture2D(_spriteBatch.GraphicsDevice, 1, 1);

@@ -38,7 +38,7 @@ namespace Monochrome.GUI
 
             _initializeCommon();
 
-            //TODO: _inputManager.UIKeyBindStateChanged += OnUIKeyBindStateChanged;
+            GUIGameComponent.Singleton.OnWindowResized += _updateRootSize;
         }
 
         private void _initializeCommon()
@@ -49,8 +49,7 @@ namespace Monochrome.GUI
                 MouseFilter = Control.MouseFilterMode.Ignore,
                 IsInsideTree = true
             };
-            RootControl.Size = new Vector2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, 
-                GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height) / UIScale;
+            RootControl.Size = GUIGameComponent.ScreenSize / UIScale;
             //TODO: GUIGameComponent.Singleton.OnWindowResized += args => _updateRootSize();
 
             StateRoot = new LayoutContainer
@@ -129,7 +128,35 @@ namespace Monochrome.GUI
             }
         }
 
-        public void KeyBindDown(BoundKeyEventArgs args)
+        public void InputEvent(InputEventArgs args)
+        {
+            switch (args)
+            {
+                case MouseButtonEventArgs mouseButton:
+                    if (mouseButton.State == KeyState.Down)
+                        MouseButtonDown(mouseButton);
+                    else
+                        MouseButtonUp(mouseButton);
+                    break;
+                case MouseWheelEventArgs mouseWheel:
+                    MouseWheel(mouseWheel);
+                    break;
+                case MouseMoveEventArgs mouseMove:
+                    MouseMove(mouseMove);
+                    break;
+                case TextEventArgs textEvent:
+                    TextEntered(textEvent);
+                    break;
+                case KeyEventArgs keyEvent:
+                    if (keyEvent.State == KeyState.Down)
+                        KeyDown(keyEvent);
+                    else
+                        KeyUp(keyEvent);
+                    break;
+            }
+        }
+
+        public void MouseButtonDown(MouseButtonEventArgs args)
         {
             var control = MouseGetControl(args.PointerLocation);
             if (args.CanFocus)
@@ -170,11 +197,11 @@ namespace Monochrome.GUI
                 return;
             }
 
-            var guiArgs = new GUIBoundKeyEventArgs(args.Function, args.State, args.PointerLocation, args.CanFocus,
-                args.PointerLocation / UIScale - control.GlobalPosition,
-                args.PointerLocation - control.GlobalPixelPosition.ToVector2());
+            var guiArgs = new GUIMouseButtonEventArgs(args.Button, args.State, control, args.Position / UIScale,
+                args.Position, args.Position / UIScale - control.GlobalPosition,
+                args.Position - control.GlobalPixelPosition.ToVector2());
 
-            _doGuiInput(control, guiArgs, (c, ev) => c.KeyBindDown(ev));
+            _doMouseGuiInput(control, guiArgs, (c, ev) => c.MouseButtonDown(ev));
 
             if (args.CanFocus)
             {
@@ -182,7 +209,7 @@ namespace Monochrome.GUI
             }
         }
 
-        public void KeyBindUp(BoundKeyEventArgs args)
+        public void MouseButtonUp(MouseButtonEventArgs args)
         {
             var control = _controlFocused ?? KeyboardFocused ?? MouseGetControl(args.PointerLocation);
             if (control == null)
@@ -190,11 +217,11 @@ namespace Monochrome.GUI
                 return;
             }
 
-            var guiArgs = new GUIBoundKeyEventArgs(args.Function, args.State, args.PointerLocation, args.CanFocus,
-                args.PointerLocation / UIScale - control.GlobalPosition,
-                args.PointerLocation - control.GlobalPixelPosition.ToVector2());
+            var guiArgs = new GUIMouseButtonEventArgs(args.Button, args.State, control, args.Position / UIScale,
+                args.Position, args.Position / UIScale - control.GlobalPosition,
+                args.Position - control.GlobalPixelPosition.ToVector2());
 
-            _doGuiInput(control, guiArgs, (c, ev) => c.KeyBindUp(ev));
+            _doMouseGuiInput(control, guiArgs, (c, ev) => c.MouseButtonUp(ev));
             _controlFocused = null;
 
             // Always mark this as handled.
@@ -253,6 +280,62 @@ namespace Monochrome.GUI
 
             var guiArgs = new GUITextEventArgs(KeyboardFocused, textEvent.CodePoint);
             KeyboardFocused.TextEntered(guiArgs);
+        }
+
+        public void KeyDown(KeyEventArgs args)
+        {
+            var control = MouseGetControl(args.PointerLocation);
+            if (args.CanFocus)
+            {
+                // If we have a modal open and the mouse down was outside it, close said modal.
+                if (_modalStack.Count != 0)
+                {
+                    var top = _modalStack[_modalStack.Count - 1];
+                    var offset = args.PointerLocation - top.GlobalPixelPosition.ToVector2();
+                    if (!top.HasPoint(offset / UIScale))
+                    {
+                        RemoveModal(top);
+                        return;
+                    }
+                }
+
+                ReleaseKeyboardFocus();
+
+                if (control == null)
+                {
+                    return;
+                }
+
+                _controlFocused = control;
+
+                if (_controlFocused.CanKeyboardFocus && _controlFocused.KeyboardFocusOnClick)
+                {
+                    _controlFocused.GrabKeyboardFocus();
+                }
+            }
+            else if (KeyboardFocused != null)
+            {
+                control = KeyboardFocused;
+            }
+
+            if (control == null)
+            {
+                return;
+            }
+
+            var guiArgs = new GUIKeyEventArgs(control, args.Key, args.State, args.PointerLocation, args.IsRepeat, args.Alt, args.Control, args.Shift, args.System);
+
+            _doGuiInput(control, guiArgs, (c, ev) => c.KeyDown(ev));
+
+            if (args.CanFocus)
+            {
+                args.Handle();
+            }
+        }
+
+        public void KeyUp(KeyEventArgs args)
+        {
+            //TODO: throw new NotImplementedException();
         }
 
         public void DisposeAllComponents()
@@ -489,7 +572,7 @@ namespace Monochrome.GUI
 
         private static void _doGuiInput<T>(Control control, T guiEvent, Action<Control, T> action,
             bool ignoreStop = false)
-            where T : GUIBoundKeyEventArgs
+            where T : InputEventArgs
         {
             while (control != null)
             {
@@ -503,8 +586,6 @@ namespace Monochrome.GUI
                     }
                 }
 
-                guiEvent.RelativePosition += control.Position;
-                guiEvent.RelativePixelPosition += control.PixelPosition.ToVector2();
                 control = control.Parent;
             }
         }
@@ -519,7 +600,7 @@ namespace Monochrome.GUI
             }
 
             _propagateUIScaleChanged(RootControl);
-            _updateRootSize();
+            _updateRootSize(GUIGameComponent.ScreenSize);
         }
 
         private static void _propagateUIScaleChanged(Control control)
@@ -532,28 +613,28 @@ namespace Monochrome.GUI
             }
         }
 
-        private void _updateRootSize()
+        private void _updateRootSize(Vector2 screenSize)
         {
-            RootControl.Size = GUIGameComponent.ScreenSize / UIScale;
+            RootControl.Size = screenSize / UIScale;
         }
 
         /// <summary>
         ///     Converts
         /// </summary>
         /// <param name="args">Event data values for a bound key state change.</param>
-        private void OnUIKeyBindStateChanged(BoundKeyEventArgs args)
+        private void OnUIKeyBindStateChanged(MouseButtonEventArgs args)
         {
             if (!args.CanFocus && KeyboardFocused != null)
             {
                 args.Handle();
             }
-            if (args.State == BoundKeyState.Down)
+            if (args.State == KeyState.Down)
             {
-                KeyBindDown(args);
+                MouseButtonDown(args);
             }
             else
             {
-                KeyBindUp(args);
+                MouseButtonUp(args);
             }
         }
     }

@@ -2,6 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <LangVersion>8</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -10,28 +11,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="RichTextEntry.cs" />
-      <Compile Remove="Controls\Label.cs" />
-      <Compile Remove="Controls\LineEdit.cs" />
-      <Compile Remove="Controls\MenuBar.cs" />
-      <Compile Remove="Controls\OptionButton.cs" />
-      <Compile Remove="Controls\OutputPanel.cs" />
-      <Compile Remove="Controls\HistoryLineEdit.cs" />
-      <Compile Remove="Controls\CheckBox.cs" />
-      <Compile Remove="Controls\RichTextLabel.cs" />
-      <Compile Remove="Controls\SpinBox.cs" />
-      <Compile Remove="Controls\TabContainer.cs" />
-      <Compile Remove="Controls\SS14Window.cs" />
-      <Compile Remove="Controls\CheckButton.cs" />
-      <Compile Remove="Controls\Tree.cs" />
-      <Compile Remove="Controls\Button.cs" />
-      <Compile Remove="Monochrome.GUI.Sample\**" />
-    </ItemGroup>
-
-    <ItemGroup>
       <EmbeddedResource Remove="Monochrome.GUI.Sample\**" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Remove="Monochrome.GUI.Sample\**" />
+    </ItemGroup>
+    
     <ItemGroup>
       <None Remove="Monochrome.GUI.Sample\**" />
     </ItemGroup>

@@ -182,9 +182,9 @@ namespace Monochrome.GUI.Controls
         {
         }
 
-        protected internal override void KeyBindDown(GUIBoundKeyEventArgs args)
+        protected internal override void MouseButtonDown(GUIMouseButtonEventArgs args)
         {
-            base.KeyBindDown(args);
+            base.MouseButtonDown(args);
 
             if (Disabled || (!_enableAllKeybinds && !args.CanFocus))
             {
@@ -225,9 +225,9 @@ namespace Monochrome.GUI.Controls
             }
         }
 
-        protected internal override void KeyBindUp(GUIBoundKeyEventArgs args)
+        protected internal override void MouseButtonUp(GUIMouseButtonEventArgs args)
         {
-            base.KeyBindUp(args);
+            base.MouseButtonUp(args);
 
             if (Disabled || (!_enableAllKeybinds && !args.CanFocus))
             {
@@ -321,9 +321,9 @@ namespace Monochrome.GUI.Controls
             /// </summary>
             public BaseButton Button { get; }
 
-            public GUIBoundKeyEventArgs Event { get; }
+            public GUIMouseButtonEventArgs Event { get; }
 
-            public ButtonEventArgs(BaseButton button, GUIBoundKeyEventArgs args)
+            public ButtonEventArgs(BaseButton button, GUIMouseButtonEventArgs args)
             {
                 Button = button;
                 Event = args;
@@ -340,7 +340,7 @@ namespace Monochrome.GUI.Controls
             /// </summary>
             public bool Pressed { get; }
 
-            public ButtonToggledEventArgs(bool pressed, BaseButton button, GUIBoundKeyEventArgs args) : base(button, args)
+            public ButtonToggledEventArgs(bool pressed, BaseButton button, GUIMouseButtonEventArgs args) : base(button, args)
             {
                 Pressed = pressed;
             }

@@ -24,7 +24,7 @@ namespace Monochrome.GUI.Controls
         /// <summary>
         ///     How to align the text inside the button.
         /// </summary>
-        public BoxContainer.AlignMode TextAlign { get => Label.Align; set => Label.Align = value; }
+        public BoxContainer.AlignMode TextAlign { get => (BoxContainer.AlignMode) Label.Align; set => Label.Align = (AlignMode) value; }
 
         /// <summary>
         ///     If true, the button will allow shrinking and clip text

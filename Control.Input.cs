@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace Monochrome.GUI
 {
@@ -29,14 +30,14 @@ namespace Monochrome.GUI
         {
         }
 
-        public event Action<GUIBoundKeyEventArgs> OnKeyBindDown;
+        public event Action<GUIMouseButtonEventArgs> OnMouseButtonDown;
 
-        protected internal virtual void KeyBindDown(GUIBoundKeyEventArgs args)
+        protected internal virtual void MouseButtonDown(GUIMouseButtonEventArgs args)
         {
-            OnKeyBindDown?.Invoke(args);
+            OnMouseButtonDown?.Invoke(args);
         }
 
-        protected internal virtual void KeyBindUp(GUIBoundKeyEventArgs args)
+        protected internal virtual void MouseButtonUp(GUIMouseButtonEventArgs args)
         {
         }
 
@@ -44,7 +45,11 @@ namespace Monochrome.GUI
         {
         }
 
-        protected internal virtual void KeyHeld(GUIKeyEventArgs args)
+        protected internal virtual void KeyDown(GUIKeyEventArgs args)
+        {
+        }
+        
+        protected internal virtual void KeyUp(GUIKeyEventArgs args)
         {
         }
 
@@ -66,21 +71,20 @@ namespace Monochrome.GUI
         }
     }
 
-    public class GUIBoundKeyEventArgs : BoundKeyEventArgs
+    public class GUIMouseButtonEventArgs : GUIMouseEventArgs
     {
         /// <summary>
         ///     Position of the mouse, relative to the current control.
         /// </summary>
-        public Vector2 RelativePosition { get; internal set; }
+        public MouseButton Button { get; }
+        public KeyState State { get; }
 
-        public Vector2 RelativePixelPosition { get; internal set; }
-
-        public GUIBoundKeyEventArgs(BoundKeyFunction function, BoundKeyState state, Vector2 pointerLocation,
-            bool canFocus, Vector2 relativePosition, Vector2 relativePixelPosition)
-            : base(function, state, pointerLocation, canFocus)
+        public GUIMouseButtonEventArgs(MouseButton button, KeyState state, Control control, Vector2 globalPosition, Vector2 globalPixelPosition, Vector2 relativePosition, Vector2 relativePixelPosition) 
+            : base(control, globalPosition, globalPixelPosition, relativePosition, relativePixelPosition)
         {
-            RelativePosition = relativePosition;
-            RelativePixelPosition = relativePixelPosition;
+            Button = button;
+            State = state;
+            CanFocus = true;
         }
     }
 
@@ -92,13 +96,15 @@ namespace Monochrome.GUI
         public Control SourceControl { get; }
 
         public GUIKeyEventArgs(Control sourceControl,
-            Keyboard.Key key,
+            Keys key,
+            KeyState state,
+            Vector2 pointerPosition,
             bool repeat,
             bool alt,
             bool control,
             bool shift,
             bool system)
-            : base(key, repeat, alt, control, shift, system)
+            : base(key, state, pointerPosition, repeat, alt, control, shift, system)
         {
             SourceControl = sourceControl;
         }
@@ -119,7 +125,7 @@ namespace Monochrome.GUI
         }
     }
 
-    public abstract class GUIMouseEventArgs : InputEventArgs
+    public abstract class GUIMouseEventArgs : MouseEventArgs
     {
         /// <summary>
         ///     The control spawning this event.
@@ -144,7 +150,7 @@ namespace Monochrome.GUI
             Vector2 globalPosition,
             Vector2 globalPixelPosition,
             Vector2 relativePosition,
-            Vector2 relativePixelPosition)
+            Vector2 relativePixelPosition) : base(globalPosition)
         {
             SourceControl = sourceControl;
             GlobalPosition = globalPosition;

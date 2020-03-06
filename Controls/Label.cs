@@ -170,7 +170,7 @@ namespace Monochrome.GUI.Controls
                         throw new ArgumentOutOfRangeException();
                 }
 
-                return (hOffset, font.GetAscent(UIScale) + font.GetLineHeight(UIScale) * newlines + vOffset);
+                return new Vector2(hOffset, font.GetAscent(UIScale) + font.GetLineHeight(UIScale) * newlines + vOffset);
             }
 
             var baseLine = CalcBaseline();
@@ -184,7 +184,7 @@ namespace Monochrome.GUI.Controls
                 }
 
                 var advance = font.DrawChar(handle, chr, baseLine, UIScale, actualFontColor);
-                baseLine += (advance, 0);
+                baseLine += new Vector2(advance, 0);
             }
         }
 
@@ -257,12 +257,8 @@ namespace Monochrome.GUI.Controls
                 else
                 {
                     var metrics = font.GetCharMetrics(chr, UIScale);
-                    if (!metrics.HasValue)
-                    {
-                        continue;
-                    }
 
-                    _cachedTextWidths[_cachedTextWidths.Count-1] += metrics.Value.Advance;
+                    _cachedTextWidths[^1] += (int)metrics.Advance;
                 }
             }
 

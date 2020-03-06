@@ -1,22 +1,24 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace Monochrome.GUI
 {
+    /*
     /// <summary>
-    ///     Event data values for a bound key state change.
+    ///     Event data values for a key state change.
     /// </summary>
-    public class BoundKeyEventArgs : EventArgs
+    public class KeyboardEventArgs : EventArgs
     {
         /// <summary>
         ///     Bound key that that is changing.
         /// </summary>
-        public BoundKeyFunction Function { get; }
+        public Keys Key { get; }
 
         /// <summary>
-        ///     New state of the <see cref="BoundKeyFunction"/>.
+        ///     New state of the <see cref="Key"/>.
         /// </summary>
-        public BoundKeyState State { get; }
+        public KeyState State { get; }
 
         /// <summary>
         ///     Current Pointer location in screen coordinates.
@@ -31,14 +33,14 @@ namespace Monochrome.GUI
         public bool Handled { get; private set; }
 
         /// <summary>
-        ///     Constructs a new instance of <see cref="BoundKeyEventArgs"/>.
+        ///     Constructs a new instance of <see cref="KeyboardEventArgs"/>.
         /// </summary>
-        /// <param name="function">Bound key that that is changing.</param>
+        /// <param name="key">Bound key that that is changing.</param>
         /// <param name="state">New state of the function.</param>
         /// <param name="pointerLocation">Current Pointer location in screen coordinates.</param>
-        public BoundKeyEventArgs(BoundKeyFunction function, BoundKeyState state, Vector2 pointerLocation, bool canFocus)
+        public KeyboardEventArgs(Keys key, KeyState state, Vector2 pointerLocation, bool canFocus)
         {
-            Function = function;
+            Key = key;
             State = state;
             PointerLocation = pointerLocation;
             CanFocus = canFocus;
@@ -52,4 +54,5 @@ namespace Monochrome.GUI
             Handled = true;
         }
     }
+    */
 }
